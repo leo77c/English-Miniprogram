@@ -30,6 +30,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(currentUserMethodArgumentResolver());
+
     }
 
     @Bean
