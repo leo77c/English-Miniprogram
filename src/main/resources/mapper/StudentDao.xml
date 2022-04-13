@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.miniprogram.www.dao.StudentDao">
+
+    <update id="updateStudent" parameterType="com.miniprogram.www.entity.Student">
+        update student
+        <set>
+            <if test="name!=null">name=#{name},</if>
+            <if test="avatar!=null">avatar=#{avatar},</if>
+            <if test="mobile!=null">mobile=#{mobile},</if>
+            <if test="gender!=null">gender=#{gender},</if>
+            <if test="profile!=null">profile=#{profile},</if>
+        </set>
+        where id=#{id}
+    </update>
+
+
+</mapper>
