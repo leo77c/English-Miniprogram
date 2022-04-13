@@ -10,6 +10,6 @@ public interface UserService {
     Student wxLogin(String code);
     boolean addStudent(Student student);
     Student getStudentById(int id);
-
     boolean updateStudentInfo(Student userInfo);
+    boolean deleteStudent(Student student);
 }

@@ -17,4 +17,7 @@ public interface StudentDao {
 
     int updateStudent(Student student);
 
+    @Delete("delete from student where id = #{id}")
+    int deleteStudent(Student student);
+
 }

@@ -104,4 +104,22 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+
+    /**
+     * @description 根据id删除学生信息
+     * @param student
+     * @return
+     */
+    @Override
+    public boolean deleteStudent(Student student) {
+        int effectNum = studentDao.deleteStudent(student);
+        if (effectNum > 0) {
+            System.out.println("删除学生用户信息成功！");
+            return true;
+        }else {
+            throw new RuntimeException("删除学生用户信息失败！");
+        }
+    }
+
+
 }
