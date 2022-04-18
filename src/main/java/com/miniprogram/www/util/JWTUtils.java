@@ -7,6 +7,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.interfaces.Claim;
 import com.miniprogram.www.entity.Student;
+import com.miniprogram.www.entity.WebUser;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -20,12 +21,12 @@ public class JWTUtils {
     public static final int calendarField = Calendar.DATE;
     public static final int calendarInterval = 7;
 
-    public static String createWxToken(Student student) {
-        Date iatDate = new Date();
-        // expire time
-        Calendar nowTime = Calendar.getInstance();
-        nowTime.add(calendarField, calendarInterval);
-        Date expiresDate = nowTime.getTime();
+        public static String createWxToken(Student student) {
+            Date iatDate = new Date();
+            // expire time
+            Calendar nowTime = Calendar.getInstance();
+            nowTime.add(calendarField, calendarInterval);
+            Date expiresDate = nowTime.getTime();
 
         String token = JWT.create()
                 .withClaim("id", student.getId()) // payload
@@ -36,6 +37,24 @@ public class JWTUtils {
 
         return token;
     }
+
+    public static String createWebToken(WebUser webUser) {
+        Date iatDate = new Date();
+        // expire time
+        Calendar nowTime = Calendar.getInstance();
+        nowTime.add(calendarField, calendarInterval);
+        Date expiresDate = nowTime.getTime();
+
+        String token = JWT.create()
+                .withClaim("id", webUser.getId()) // payload
+                .withClaim("account", webUser.getAccount())
+                .withIssuedAt(iatDate) // sign time
+                .withExpiresAt(expiresDate) // expire time
+                .sign(Algorithm.HMAC256(SECRET)); // signature
+
+        return token;
+    }
+
 
     public static Map<String, Claim> verifyToken(String token) {
         JWTVerifier verifier = JWT.require(Algorithm.HMAC256(SECRET)).build();

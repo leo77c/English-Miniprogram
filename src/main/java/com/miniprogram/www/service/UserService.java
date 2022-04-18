@@ -12,4 +12,5 @@ public interface UserService {
     Student getStudentById(int id);
     boolean updateStudentInfo(Student userInfo);
     boolean deleteStudent(Student student);
+    boolean judgeLegalInfo(Student student);
 }

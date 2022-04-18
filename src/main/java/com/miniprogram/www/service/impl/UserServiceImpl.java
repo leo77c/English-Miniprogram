@@ -29,7 +29,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public Student wxLogin(String code) {
         Student student = null;
-
         //访问微信API，拿code换取openid和session_key
         String urlFormat = "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code";
         String url = String.format(urlFormat, appId, appSerect, code);
@@ -64,11 +63,12 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public boolean addStudent(Student student) {
-        if (student.getOpenid() != null && !"".equals(student.getOpenid())) {
+        if (student.getOpenid() == null || "".equals(student.getOpenid())) {
             throw new RuntimeException("openid不能为空！");
         }
         int effectNum = studentDao.insertStudent(student);
         if (effectNum > 0) {
+            System.out.println("添加学生用户成功！");
             return true;
         }else {
             throw new RuntimeException("添加学生用户失败！");
@@ -84,8 +84,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public Student getStudentById(int id) {
         Student student = studentDao.queryStudentById(id);
-        if (student == null) throw new RuntimeException("用户不存在！");
-        return student;
+        if (student != null) {
+            System.out.println("查找学生用户成功！用户id为" + student.getId());
+            return student;
+        }else {
+            throw new RuntimeException("查找学生用户失败！用户不存在！");
+        }
     }
 
     /**
@@ -95,6 +99,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public boolean updateStudentInfo(Student student) {
+        judgeLegalInfo(student);
         int effectNum = studentDao.updateStudent(student);
         if (effectNum > 0) {
             System.out.println("更新学生用户信息成功！");
@@ -119,6 +124,21 @@ public class UserServiceImpl implements UserService {
         }else {
             throw new RuntimeException("删除学生用户信息失败！");
         }
+    }
+
+    /**
+     * @description 更新信息时检查字段长度
+     * @param student
+     * @return
+     */
+    @Override
+    public boolean judgeLegalInfo(Student student) {
+        if (student.getAvatar() != null && student.getAvatar().length() > 500) throw new RuntimeException("avatar字段过长！");
+        if (student.getName() != null && student.getName().length() > 20) throw new RuntimeException("name字段过长！");
+        if (student.getMobile() != null && student.getMobile().length() > 20) throw new RuntimeException("mobile字段过长！");
+        if (student.getGender() != null && student.getGender().length() > 10) throw new RuntimeException("gender字段过长！");
+        if (student.getProfile() != null && student.getProfile().length() > 100) throw new RuntimeException("profile字段过长！");
+        return true;
     }
 
 

@@ -6,7 +6,9 @@ import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
 import com.miniprogram.www.entity.Student;
+import com.miniprogram.www.entity.WebUser;
 import com.miniprogram.www.service.UserService;
+import com.miniprogram.www.service.WebUserService;
 import com.miniprogram.www.util.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -19,6 +21,8 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private WebUserService webUserService;
 
     /**
      * @description 拦截请求，判断是否带有token，若token验证成功则为request添加userid
@@ -38,11 +42,27 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         try {
             Map<String, Claim> claims = JWTUtils.verifyToken(token);
             int userid = claims.get("id").asInt();
-            Student student = userService.getStudentById(userid);
+//            Student student = userService.getStudentById(userid);
+//
+//            if (claims.get("openid").asString().equals(student.getOpenid())) {
+//                request.setAttribute("userid", student.getId());
+//            }else throw new RuntimeException("用户id与openid不匹配！");
 
-            if (claims.get("openid").asString().equals(student.getOpenid())) {
-                request.setAttribute("userid", student.getId());
-            }else throw new RuntimeException("用户id与openid不匹配！");
+            if (claims.get("account") == null) {
+                //wx用户
+                System.out.println("wx user");
+                Student student = userService.getStudentById(userid);
+                if (!claims.get("openid").asString().equals(student.getOpenid())) {
+                    throw new RuntimeException("用户id与openid不匹配！");
+                }
+            }else {
+                //web用户
+                System.out.println("web user");
+                String account = claims.get("account").asString();
+                WebUser webUser = webUserService.getWebUserByAccount(account);
+                if (userid != webUser.getId()) throw new RuntimeException("用户id与账号不匹配！");
+            }
+            request.setAttribute("userid", userid);
 
         } catch (SignatureVerificationException e) {
             throw new RuntimeException("无效签名！");
