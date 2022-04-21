@@ -3,17 +3,28 @@ package com.miniprogram.www.util;
 import com.alibaba.druid.util.StringUtils;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.AlgorithmMismatchException;
+import com.auth0.jwt.exceptions.SignatureVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.interfaces.Claim;
 import com.miniprogram.www.entity.Student;
 import com.miniprogram.www.entity.WebUser;
+import com.miniprogram.www.service.UserService;
+import com.miniprogram.www.service.WebUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
 public class JWTUtils {
+
+    @Autowired
+    UserService userService;
+    @Autowired
+    WebUserService webUserService;
 
     /** token秘钥 backups:JKKLJOoasdlfj */
     public static final String SECRET = "JKKLJOoasdlfj";
@@ -61,6 +72,7 @@ public class JWTUtils {
         DecodedJWT jwt = verifier.verify(token);
         if (jwt == null) throw new RuntimeException("token验证异常！");
         return jwt.getClaims();
+
     }
 
     public static int getUserId(String token) {

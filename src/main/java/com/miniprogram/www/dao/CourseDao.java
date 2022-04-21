@@ -10,4 +10,9 @@ public interface CourseDao {
 
     @Select("select * from course order by student_count desc")
     List<Course> queryAllCourses();
+
+    @Select("select * from course where id=#{id}")
+    Course queryCourseById(int id);
+
+    List<Course> queryCourseListById(List<Integer> idList);
 }

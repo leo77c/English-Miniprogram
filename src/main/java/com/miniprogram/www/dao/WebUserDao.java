@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 @Mapper
 public interface WebUserDao {
 
@@ -18,5 +20,7 @@ public interface WebUserDao {
     @Insert("insert into web_user(account, password, name, type) values (#{account}, #{password}, #{name}, #{type})")
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
     int insertWebUser(WebUser webUser);
+
+    List<String> queryNameListById(List<Integer> idList);
 
 }

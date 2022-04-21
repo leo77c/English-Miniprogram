@@ -64,4 +64,15 @@ public class WebUserController {
 
         return response;
     }
+
+    @RequestMapping("/getname")
+    public Map<String, Object> getTeacherName(@RequestParam(value = "id", required = true) int id) {
+        Map<String, Object> response = new HashMap<String, Object>();
+        WebUser webUser = webUserService.getWebUserById(id);
+
+        response.put("success",true);
+        response.put("name", webUser.getName());
+
+        return response;
+    }
 }

@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
     public Student getStudentById(int id) {
         Student student = studentDao.queryStudentById(id);
         if (student != null) {
-            System.out.println("查找学生用户成功！用户id为" + student.getId());
+            //System.out.println("查找学生用户成功！用户id为" + student.getId());
             return student;
         }else {
             throw new RuntimeException("查找学生用户失败！用户不存在！");

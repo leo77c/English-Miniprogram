@@ -50,14 +50,12 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
 
             if (claims.get("account") == null) {
                 //wx用户
-                System.out.println("wx user");
                 Student student = userService.getStudentById(userid);
                 if (!claims.get("openid").asString().equals(student.getOpenid())) {
                     throw new RuntimeException("用户id与openid不匹配！");
                 }
             }else {
                 //web用户
-                System.out.println("web user");
                 String account = claims.get("account").asString();
                 WebUser webUser = webUserService.getWebUserByAccount(account);
                 if (userid != webUser.getId()) throw new RuntimeException("用户id与账号不匹配！");

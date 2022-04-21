@@ -24,8 +24,8 @@ public class InterceptorConfig implements WebMvcConfigurer {
                 //拦截的路径
                 .addPathPatterns("/**")
                 //排除登录接口
-                .excludePathPatterns("/user/wxLogin", "/webuser/register", "/webuser/login", "/upload/getuptoken",
-                        "/test/1", "/course/getAll");
+                .excludePathPatterns("/user/wxLogin", "/webuser/register", "/webuser/login", "/webuser/getname",
+                        "/upload/getuptoken", "/course/getAll");
     }
 
     @Override
